@@ -67,10 +67,10 @@ let allSongs = {
 	],
 	"2000s": [
 		{
-			link: "",
+			link: "PokerFace.mp3",
 			artist: ["lady gaga"],
 			name: ["poker face"],
-			answer: "",
+			answer: "Poker Face by Lady Gaga",
 		},
 		{
 			link: "",
@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	audio.load();
 	audio.play();
 	$("#endScreen").toggle();
+	$("#questionNum").text(questionNumber + 1);
 });
 scoreText.textContent = score;
 function getParameterByName(name, url = window.location.href) {
@@ -136,12 +137,12 @@ const createTable = () => {
 	let res = "";
 	for (let i = 0; i < finalGrid.length; i++) {
 		res += `<div class="four column row">
-                    <div class="ui header column">
+                    <div class="ui column">
                         <audio class="songWidth" src="songs/${finalGrid[i][0]}" controls>
                     </div>
-                    <div class="ui header column">${finalGrid[i][1]}</div>
-                    <div class="ui header column">${finalGrid[i][2]}</div>
-                    <div class="ui header column">${finalGrid[i][3]}/3</div>
+                    <div class="ui column">${finalGrid[i][1]}</div>
+                    <div class="ui column">${finalGrid[i][2]}</div>
+                    <div class="ui column">${finalGrid[i][3]}/3</div>
 		        </div>`;
 	}
 	return res;
@@ -197,6 +198,7 @@ form.addEventListener("submit", (e) => {
 		],
 	]);
 	questionNumber++;
+	$("#questionNum").text(questionNumber + 1);
 	audio.src = "songs/" + songs[questionNumber].link;
 	audio.load();
 	audio.play();
