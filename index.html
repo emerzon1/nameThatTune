@@ -25,7 +25,6 @@
 				width: 100%;
 				background-color: lightseagreen;
 				height: 7%;
-				text-align: center;
 			}
 			.footer {
 				background-color: lightseagreen;
@@ -56,19 +55,20 @@
 				<div class="ui grey deny button">Don't Show Again</div>
 			</div>
 		</div>
-		<div class="main header">
-			<h2
-				class="ui header"
-				style="display: inline-block; padding-top: 1%"
-			>
-				<a href="" style="color: black">Name That Tune</a>
-			</h2>
+		<div class="main header ui menu" style="margin-top: 0px">
+			<a class="header item" href="?">Name That Tune</a>
+			<a class="item" href="?mode=modern">Modern Music</a>
+			<a class="item" href="?mode=2000s">2000s Music</a>
 		</div>
 		<div
 			class="ui middle aligned center aligned grid"
 			style="margin-bottom: 0px"
 		>
 			<div class="column">
+				<div id="mainText" class="ui header">
+					Welcome to Name That Tune. Select a mode using the menu at
+					the top of the page.
+				</div>
 				<form id="form" class="ui huge form">
 					<div class="ui header">
 						<audio id="audio" src="" autoplay controls></audio>
@@ -113,7 +113,9 @@
 						<div class="ui header column">Score</div>
 					</div>
 				</div>
-				<h1 id="ui large header">Score: <span id="score">0</span></h1>
+				<h1 id="scoreContent" class="ui large header">
+					Score: <span id="score">0</span>
+				</h1>
 			</div>
 		</div>
 		<div class="footer">
