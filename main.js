@@ -110,8 +110,88 @@ let allSongs = {
 			link: "YouBelongWithMe.mp3",
 			artist: ["taylor swift"],
 			name: ["you belong with me"],
-			answer: " by Taylor Swift",
+			answer: "You Belong With Me by Taylor Swift",
 		},
+		{
+			link: "MrBrightside.mp3",
+			artist: ["the killers"],
+			name: ["mr. brightside", "mr brightside"],
+			answer: "",
+		},
+		{
+			link: "Zombie.mp3",
+			artist: ["the cranberries", "cranberries"],
+			name: ["zombie"],
+			answer: "Zombie by The Cranberries",
+		},
+		/*{
+			link: "",
+			artist: [],
+			name: [],
+			answer: "",
+		},
+		{
+			link: "",
+			artist: [],
+			name: [],
+			answer: "",
+		},*/
+	],
+	"1990s": [
+		{
+			link: "BabyOneMoreTime.mp3",
+			artist: ["britney spears"],
+			name: ["baby one more time", "hit me baby one more time"],
+			answer: "Baby One More Time by Britney Spears",
+		},
+		{
+			link: "UnbreakMyHeart.mp3",
+			artist: ["toni braxton"],
+			name: ["unbreak my heart", "un-break my heart"],
+			answer: "Un-Break My Heart by Toni Braxton",
+		},
+		{
+			link: "IWantItThatWay.mp3",
+			artist: ["backstreet boys"],
+			name: ["i want it that way"],
+			answer: "I Want It That Way by Backstreet Boys",
+		},
+		{
+			link: "Wonderwall.mp3",
+			artist: ["oasis"],
+			name: ["wonder wall", "wonderwall"],
+			answer: "Wonderwall by Oasis",
+		},
+		{
+			link: "LifeIsAHighway.mp3",
+			artist: ["tom cochrane"],
+			name: ["life is a highway"],
+			answer: "Life is a Highway by Tom Cochrane",
+		},
+		/*{
+			link: "",
+			artist: [],
+			name: [],
+			answer: "",
+		},
+		{
+			link: "",
+			artist: [],
+			name: [],
+			answer: "",
+		},
+		{
+			link: "",
+			artist: [],
+			name: [],
+			answer: "",
+		},
+		{
+			link: "",
+			artist: [],
+			name: [],
+			answer: "",
+		},*/
 	],
 };
 let finalGrid = [];
