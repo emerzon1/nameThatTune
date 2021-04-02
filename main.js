@@ -81,7 +81,11 @@ let allSongs = {
 		{
 			link: "SinceYouBeenGone.mp3",
 			artist: ["kelly clarkson"],
-			name: ["since you been gone", "since u been gone"],
+			name: [
+				"since you been gone",
+				"since u been gone",
+				"since you've been gone",
+			],
 			answer: "Since U Been Gone by Kelly Clarkson",
 		},
 		{
