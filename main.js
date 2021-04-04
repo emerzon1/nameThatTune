@@ -281,6 +281,7 @@ const createTable = () => {
 };
 const createLeaderboard = () => {
 	let res = `<div class="eight wide column">
+                <h1 class="ui header">Leaderboard</h1>
                 <div class="ui middle aligned center aligned grid">
                     <div class="four column row">
                         <div class="ui header column">Place</div>
@@ -288,7 +289,7 @@ const createLeaderboard = () => {
                         <div class="ui header column">Score</div>
                         <div class="ui header column">Time (seconds)</div>
                     </div>`;
-	for (let i = 0; i < leaderboard.length; i++) {
+	for (let i = 0; i < Math.min(10, leaderboard.length); i++) {
 		res += `<div class="four column row">
                     <div class="ui column">${i + 1}</div>
                     <div class="ui column">${leaderboard[i].name}</div>
@@ -296,6 +297,7 @@ const createLeaderboard = () => {
                     <div class="ui column">${leaderboard[i].time}</div>
                 </div>`;
 	}
+
 	res += `</div></div><div class="ui vertical divider">and</div>`;
 	return res;
 };
@@ -328,13 +330,19 @@ form.addEventListener("submit", (e) => {
 				name: localStorage.getItem("name"),
 				score: score,
 				category: mode,
-				time: elapsed / 1000,
+				time: parseInt(elapsed / 1000),
 			};
 			leaderboard.push(data);
 			//Function used to determine the order of the elements. It is
 			//expected to return a negative value if first argument is less than second argument,
 			//zero if they're equal and a positive value otherwise. I
-			leaderboard.sort((a, b) => b.score - a.score);
+			leaderboard.sort((a, b) => {
+				if (a.score != b.score) {
+					return b.score - a.score;
+				} else {
+					return a.time - b.time;
+				}
+			});
 			console.log(leaderboard);
 			$.ajax({
 				url: "https://name-that-tune-leaderboard.herokuapp.com/",

@@ -33,7 +33,6 @@ app.get("/", (req, res) => {
 	console.log(category);
 	Person.find({ category })
 		.sort({ score: -1, time: 1 })
-		.limit(10)
 		.then((users) => res.json(users))
 		.catch((err) => res.status(400).json("Error: " + err));
 });
