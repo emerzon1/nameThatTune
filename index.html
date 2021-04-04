@@ -17,8 +17,6 @@
 		/>
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 		<script
 			async
 			src="https://www.googletagmanager.com/gtag/js?id=G-MR8ZNK72C8"
@@ -64,19 +62,6 @@
 		</style>
 	</head>
 	<body>
-		<div class="ui modal test">
-			<div class="header">Instructions</div>
-			<div class="content">
-				Welcome to Name That Tune. You will listen to five songs and try
-				to guess the name and the singer of each of the songs. The song
-				name is worth two points and the singer is worth one. The
-				maximum score is 15 points. Good luck!
-			</div>
-			<div class="actions">
-				<div class="ui deny primary button">Close</div>
-				<div class="ui grey deny button">Don't Show Again</div>
-			</div>
-		</div>
 		<div class="main header ui menu" style="margin-top: 0px">
 			<a class="header item" href="?">Name That Tune</a>
 			<a class="item" href="?mode=modern">Modern Music</a>
@@ -89,8 +74,16 @@
 		>
 			<div class="column">
 				<div id="mainText" class="ui header">
-					Welcome to Name That Tune. Select a mode using the menu at
-					the top of the page.
+					Enter your name to record your score:<br /><br />
+					<div class="ui input">
+						<input id="person" type="text" placeholder="Name" />
+					</div>
+					<br /><br />Welcome to Name That Tune. Select a mode using
+					the menu at the top of the page.
+				</div>
+				<div id="goBack" class="ui header">
+					Click <a href="?">this</a> link to go back to the previous
+					page and enter your name to record your score.
 				</div>
 				<form id="form" class="ui huge form">
 					<div class="ui header">

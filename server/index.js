@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const Person = require("./models/Person");
 dotenv.config();
 const app = express();
@@ -9,6 +10,7 @@ const url =
 	process.env.DB_PASSWORD +
 	"@cluster0.t18va.mongodb.net/Leaderboard?retryWrites=true&w=majority";
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 mongoose.set("bufferCommands", false);
@@ -26,8 +28,8 @@ app.get("/", (req, res) => {
 	let category = req.query.category;
 	console.log(category);
 	Person.find({ category })
-		.sort({ score: -1 })
-		.limit(5)
+		.sort({ score: -1, time: 1 })
+		.limit(10)
 		.then((users) => res.json(users))
 		.catch((err) => res.status(400).json("Error: " + err));
 });

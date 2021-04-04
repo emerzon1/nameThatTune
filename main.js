@@ -2,6 +2,9 @@ const form = document.getElementById("form");
 const nameInput = document.getElementById("name");
 const artistInput = document.getElementById("artist");
 const scoreText = document.getElementById("score");
+const personInput = document.getElementById("person");
+let start = new Date().getTime();
+let leaderboard;
 let allSongs = {
 	modern: [
 		{
@@ -201,29 +204,46 @@ function shuffleArray(array) {
 		[array[i], array[j]] = [array[j], array[i]];
 	}
 }
-$(function () {
-	$(".ui.grey.deny.button").click(() => {
-		localStorage.setItem("doNotShow", "true");
-	});
-});
 $(".github.icon").click(() => {
 	window.open("https://github.com/emerzon1", "_blank");
 });
 $(function () {
 	if (getParameterByName("mode")) {
 		$("#mainText").toggle();
-		if (!localStorage.getItem("doNotShow")) {
-			$(".test").modal("show");
-			$(".test").modal({
-				closable: true,
-			});
+		if (!localStorage.getItem("name")) {
+			//$("#goBack").toggle();
+			$("#form").toggle();
+			$("#scoreContent").toggle();
+		} else {
+			$("#goBack").toggle();
 		}
+		$.ajax({
+			url:
+				"https://name-that-tune-leaderboard.herokuapp.com/?category=" +
+				mode,
+			type: "GET",
+			success: (res) => {
+				leaderboard = res;
+			},
+			error: (err) => {
+				console.log(err);
+			},
+		});
 	} else {
 		$("#form").toggle();
+		$("#goBack").toggle();
 		$("#endScreen").toggle();
 		$("#scoreContent").toggle();
 	}
 });
+personInput.value = localStorage.getItem("name")
+	? localStorage.getItem("name")
+	: "";
+
+personInput.addEventListener("change", (e) => {
+	localStorage.setItem("name", e.target.value);
+});
+
 let questionNumber = 0;
 let score = 0;
 const audio = document.getElementById("audio");
@@ -243,7 +263,6 @@ function getParameterByName(name, url = window.location.href) {
 	return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 const mode = getParameterByName("mode");
-console.log(mode);
 let songs = allSongs[mode];
 shuffleArray(songs);
 const createTable = () => {
@@ -260,6 +279,10 @@ const createTable = () => {
 	}
 	return res;
 };
+// const createLeaderboard = () => {
+//     let res = "";
+//     for(let i )
+// }
 form.addEventListener("submit", (e) => {
 	e.preventDefault();
 	let name = e.target[0].value;
@@ -283,7 +306,33 @@ form.addEventListener("submit", (e) => {
 				addedScore,
 			],
 		]);
-		console.log(finalGrid);
+		if (localStorage.getItem("name")) {
+			let elapsed = new Date().getTime() - start;
+			let data = {
+				name: localStorage.getItem("name"),
+				score: score,
+				category: mode,
+				time: elapsed / 1000,
+			};
+			leaderboard.push(data);
+			//Function used to determine the order of the elements. It is
+			//expected to return a negative value if first argument is less than second argument,
+			//zero if they're equal and a positive value otherwise. I
+			leaderboard.sort((a, b) => b.score - a.score);
+			console.log(leaderboard);
+			$.ajax({
+				url: "https://name-that-tune-leaderboard.herokuapp.com/",
+				type: "POST",
+				data,
+				dataType: "json",
+				success: (res) => {
+					console.log(res);
+				},
+				error: (err) => {
+					console.log(err);
+				},
+			});
+		}
 		audio.pause();
 		scoreText.textContent = score;
 		$("#form").toggle();
