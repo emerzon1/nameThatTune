@@ -296,6 +296,7 @@ const createLeaderboard = () => {
                     <div class="ui column">${leaderboard[i].score}</div>
                     <div class="ui column">${leaderboard[i].time}</div>
                 </div>`;
+		console.log(i);
 	}
 
 	res += `</div></div><div class="ui vertical divider">and</div>`;
