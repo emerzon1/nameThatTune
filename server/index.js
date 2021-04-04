@@ -42,6 +42,7 @@ app.post("/", async (req, res) => {
 		name: req.body.name,
 		score: req.body.score,
 		category: req.body.category,
+		time: req.body.time,
 	});
 	await user.save();
 	res.send(req.body);
