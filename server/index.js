@@ -11,6 +11,10 @@ const url =
 	"@cluster0.t18va.mongodb.net/Leaderboard?retryWrites=true&w=majority";
 
 app.use(cors());
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 mongoose.set("bufferCommands", false);

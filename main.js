@@ -279,10 +279,26 @@ const createTable = () => {
 	}
 	return res;
 };
-// const createLeaderboard = () => {
-//     let res = "";
-//     for(let i )
-// }
+const createLeaderboard = () => {
+	let res = `<div class="eight wide column">
+                <div class="ui middle aligned center aligned grid">
+                    <div class="four column row">
+                        <div class="ui header column">Place</div>
+                        <div class="ui header column">Name</div>
+                        <div class="ui header column">Score</div>
+                        <div class="ui header column">Time (seconds)</div>
+                    </div>`;
+	for (let i = 0; i < leaderboard.length; i++) {
+		res += `<div class="four column row">
+                    <div class="ui column">${i + 1}</div>
+                    <div class="ui column">${leaderboard[i].name}</div>
+                    <div class="ui column">${leaderboard[i].score}</div>
+                    <div class="ui column">${leaderboard[i].time}</div>
+                </div>`;
+	}
+	res += `</div></div><div class="ui vertical divider">and</div>`;
+	return res;
+};
 form.addEventListener("submit", (e) => {
 	e.preventDefault();
 	let name = e.target[0].value;
@@ -307,6 +323,7 @@ form.addEventListener("submit", (e) => {
 			],
 		]);
 		if (localStorage.getItem("name")) {
+			console.log(haha);
 			let elapsed = new Date().getTime() - start;
 			let data = {
 				name: localStorage.getItem("name"),
@@ -323,7 +340,7 @@ form.addEventListener("submit", (e) => {
 			$.ajax({
 				url: "https://name-that-tune-leaderboard.herokuapp.com/",
 				type: "POST",
-				data,
+				data: data,
 				dataType: "json",
 				success: (res) => {
 					console.log(res);
@@ -337,6 +354,7 @@ form.addEventListener("submit", (e) => {
 		scoreText.textContent = score;
 		$("#form").toggle();
 		$("#endScreen").append(createTable());
+		$("#fullGrid").append(createLeaderboard());
 		$("#endScreen").toggle();
 		return;
 	}
