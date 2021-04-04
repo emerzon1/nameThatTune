@@ -323,7 +323,6 @@ form.addEventListener("submit", (e) => {
 			],
 		]);
 		if (localStorage.getItem("name")) {
-			console.log(haha);
 			let elapsed = new Date().getTime() - start;
 			let data = {
 				name: localStorage.getItem("name"),
