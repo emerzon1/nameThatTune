@@ -250,6 +250,7 @@ const audio = document.getElementById("audio");
 document.addEventListener("DOMContentLoaded", () => {
 	audio.src = "songs/" + songs[questionNumber].link;
 	audio.load();
+	audio.pause();
 	$("#endScreen").toggle();
 	$("#questionNum").text(questionNumber + 1);
 });
