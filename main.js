@@ -9,7 +9,7 @@ let allSongs = {
 	modern: [
 		{
 			link: "Memories.mp3",
-			artist: ["maroon 5"],
+			artist: ["maroon 5", "maroon five"],
 			name: ["memories"],
 			answer: "Memories by Maroon 5",
 		},
@@ -197,6 +197,30 @@ let allSongs = {
 		},*/
 	],
 };
+const createLeaderboard = (lb, header = true) => {
+	let res = `<div class="eight wide column">
+                ${header ? `<h1 class="ui header">Leaderboard</h1>` : ``}
+                <div class="ui middle aligned center aligned grid">
+                    <div class="four column row">
+                        <div class="ui header column">Place</div>
+                        <div class="ui header column">Name</div>
+                        <div class="ui header column">Score</div>
+                        <div class="ui header column">Time (seconds)</div>
+                    </div>`;
+	for (let i = 0; i < Math.min(10, lb.length); i++) {
+		res += `<div class="four column row">
+                    <div class="ui column">${i + 1}</div>
+                    <div class="ui column">${lb[i].name}</div>
+                    <div class="ui column">${lb[i].score}</div>
+                    <div class="ui column">${lb[i].time}</div>
+                </div>`;
+	}
+
+	header
+		? (res += `</div></div><div class="ui vertical divider">and</div>`)
+		: (res += "");
+	return res;
+};
 let finalGrid = [];
 function shuffleArray(array) {
 	for (let i = array.length - 1; i > 0; i--) {
@@ -230,10 +254,92 @@ $(function () {
 			},
 		});
 	} else {
-		$("#form").toggle();
-		$("#goBack").toggle();
-		$("#endScreen").toggle();
-		$("#scoreContent").toggle();
+		if (getParameterByName("showLeaderboard")) {
+			$("#form").toggle();
+			$("#goBack").toggle();
+			$("#endScreen").toggle();
+			$("#scoreContent").toggle();
+			$("#fullGrid").css("display", "none");
+			$("#mainText").toggle();
+			console.log("here");
+			let modernLB;
+			let lb2000;
+			let lb1990;
+			$("body").append(
+				`<div class="ui middle aligned divided center aligned grid" id="leaderboard" style="margin-bottom: 0px">`
+			);
+			$.ajax({
+				url:
+					"https://name-that-tune-leaderboard.herokuapp.com/?category=modern",
+				type: "GET",
+				success: (res) => {
+					modernLB = res;
+					$("#leaderboard").append(`
+                    <div class="five wide column">
+                        <div class="ui header">
+                            Modern Music Leaderboard
+                            </div>
+                            ${createLeaderboard(modernLB, false)}
+                        
+                    </div>`);
+				},
+				error: (err) => {
+					console.log(err);
+				},
+			});
+			$.ajax({
+				url:
+					"https://name-that-tune-leaderboard.herokuapp.com/?category=2000s",
+				type: "GET",
+				success: (res) => {
+					lb2000 = res;
+					setTimeout(
+						() =>
+							$("#leaderboard").append(`
+                    <div class="five wide column">
+                        <div class="ui header">
+                            2000s Music Leaderboard
+                        </div>
+                        ${createLeaderboard(lb2000, false)}
+                        
+                    </div>`),
+						25
+					);
+				},
+				error: (err) => {
+					console.log(err);
+				},
+			});
+			$.ajax({
+				url:
+					"https://name-that-tune-leaderboard.herokuapp.com/?category=1990s",
+				type: "GET",
+				success: (res) => {
+					lb1990 = res;
+					setTimeout(
+						() =>
+							$("#leaderboard").append(`
+                    <div class="five wide column">
+                        <div class="ui header">
+                            1990s Music Leaderboard
+                            </div>
+                            ${createLeaderboard(lb1990, false)}
+                        
+                    </div>`),
+						50
+					);
+				},
+				error: (err) => {
+					console.log(err);
+				},
+			});
+			$("#leaderboard").append(`</div>`);
+		} else {
+			$("#form").toggle();
+			$("#goBack").toggle();
+			$("#endScreen").toggle();
+			$("#scoreContent").toggle();
+		}
 	}
 });
 personInput.value = localStorage.getItem("name")
@@ -280,29 +386,7 @@ const createTable = () => {
 	}
 	return res;
 };
-const createLeaderboard = () => {
-	let res = `<div class="eight wide column">
-                <h1 class="ui header">Leaderboard</h1>
-                <div class="ui middle aligned center aligned grid">
-                    <div class="four column row">
-                        <div class="ui header column">Place</div>
-                        <div class="ui header column">Name</div>
-                        <div class="ui header column">Score</div>
-                        <div class="ui header column">Time (seconds)</div>
-                    </div>`;
-	for (let i = 0; i < Math.min(10, leaderboard.length); i++) {
-		res += `<div class="four column row">
-                    <div class="ui column">${i + 1}</div>
-                    <div class="ui column">${leaderboard[i].name}</div>
-                    <div class="ui column">${leaderboard[i].score}</div>
-                    <div class="ui column">${leaderboard[i].time}</div>
-                </div>`;
-		console.log(i);
-	}
 
-	res += `</div></div><div class="ui vertical divider">and</div>`;
-	return res;
-};
 form.addEventListener("submit", (e) => {
 	e.preventDefault();
 	let name = e.target[0].value;
@@ -363,7 +447,7 @@ form.addEventListener("submit", (e) => {
 		scoreText.textContent = score;
 		$("#form").toggle();
 		$("#endScreen").append(createTable());
-		$("#fullGrid").append(createLeaderboard());
+		$("#fullGrid").append(createLeaderboard(leaderboard));
 		$("#endScreen").toggle();
 		return;
 	}
