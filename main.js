@@ -268,13 +268,42 @@ $(function () {
 			$("body").append(
 				`<div class="ui middle aligned divided center aligned grid" id="leaderboard" style="margin-bottom: 0px">`
 			);
-			$.ajax({
-				url:
-					"https://name-that-tune-leaderboard.herokuapp.com/?category=modern",
-				type: "GET",
-				success: (res) => {
-					modernLB = res;
-					$("#leaderboard").append(`
+			$.when(
+				$.ajax({
+					url:
+						"https://name-that-tune-leaderboard.herokuapp.com/?category=modern",
+					type: "GET",
+					success: (res) => {
+						modernLB = res;
+					},
+					error: (err) => {
+						console.log(err);
+					},
+				}),
+				$.ajax({
+					url:
+						"https://name-that-tune-leaderboard.herokuapp.com/?category=2000s",
+					type: "GET",
+					success: (res) => {
+						lb2000 = res;
+					},
+					error: (err) => {
+						console.log(err);
+					},
+				}),
+				$.ajax({
+					url:
+						"https://name-that-tune-leaderboard.herokuapp.com/?category=1990s",
+					type: "GET",
+					success: (res) => {
+						lb1990 = res;
+					},
+					error: (err) => {
+						console.log(err);
+					},
+				})
+			).then(() => {
+				$("#leaderboard").append(`
                     <div class="five wide column">
                         <div class="ui header">
                             Modern Music Leaderboard
@@ -282,56 +311,22 @@ $(function () {
                             ${createLeaderboard(modernLB, false)}
                         
                     </div>`);
-				},
-				error: (err) => {
-					console.log(err);
-				},
-			});
-			$.ajax({
-				url:
-					"https://name-that-tune-leaderboard.herokuapp.com/?category=2000s",
-				type: "GET",
-				success: (res) => {
-					lb2000 = res;
-					setTimeout(
-						() =>
-							$("#leaderboard").append(`
+				$("#leaderboard").append(`
                     <div class="five wide column">
                         <div class="ui header">
                             2000s Music Leaderboard
                         </div>
                         ${createLeaderboard(lb2000, false)}
                         
-                    </div>`),
-						25
-					);
-				},
-				error: (err) => {
-					console.log(err);
-				},
-			});
-			$.ajax({
-				url:
-					"https://name-that-tune-leaderboard.herokuapp.com/?category=1990s",
-				type: "GET",
-				success: (res) => {
-					lb1990 = res;
-					setTimeout(
-						() =>
-							$("#leaderboard").append(`
+                    </div>`);
+				$("#leaderboard").append(`
                     <div class="five wide column">
                         <div class="ui header">
                             1990s Music Leaderboard
                             </div>
                             ${createLeaderboard(lb1990, false)}
                         
-                    </div>`),
-						50
-					);
-				},
-				error: (err) => {
-					console.log(err);
-				},
+                    </div>`);
 			});
 			$("#leaderboard").append(`</div>`);
 		} else {
