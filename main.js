@@ -28,7 +28,7 @@ const _min = (d0, d1, d2, bx, ay) => {
 		? d1
 		: d1 + 1;
 };
-//edit distance
+
 const distance = (a, b) => {
 	if (a === b) {
 		return 0;
