@@ -5,6 +5,298 @@ const scoreText = document.getElementById("score");
 const personInput = document.getElementById("person");
 let start = new Date().getTime();
 let leaderboard;
+const shuffleArray = (array) => {
+	for (let i = array.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[array[i], array[j]] = [array[j], array[i]];
+	}
+};
+const getParameterByName = (name, url = window.location.href) => {
+	name = name.replace(/[\[\]]/g, "\\$&");
+	let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return "";
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+const _min = (d0, d1, d2, bx, ay) => {
+	return d0 < d1 || d2 < d1
+		? d0 > d2
+			? d2 + 1
+			: d0 + 1
+		: bx === ay
+		? d1
+		: d1 + 1;
+};
+//edit distance
+const distance = (a, b) => {
+	if (a === b) {
+		return 0;
+	}
+
+	if (a.length > b.length) {
+		var tmp = a;
+		a = b;
+		b = tmp;
+	}
+
+	var la = a.length;
+	var lb = b.length;
+
+	while (la > 0 && a.charCodeAt(la - 1) === b.charCodeAt(lb - 1)) {
+		la--;
+		lb--;
+	}
+
+	var offset = 0;
+
+	while (offset < la && a.charCodeAt(offset) === b.charCodeAt(offset)) {
+		offset++;
+	}
+
+	la -= offset;
+	lb -= offset;
+
+	if (la === 0 || lb < 3) {
+		return lb;
+	}
+
+	var x = 0;
+	var y;
+	var d0;
+	var d1;
+	var d2;
+	var d3;
+	var dd;
+	var dy;
+	var ay;
+	var bx0;
+	var bx1;
+	var bx2;
+	var bx3;
+
+	var vector = [];
+
+	for (y = 0; y < la; y++) {
+		vector.push(y + 1);
+		vector.push(a.charCodeAt(offset + y));
+	}
+
+	var len = vector.length - 1;
+
+	for (; x < lb - 3; ) {
+		bx0 = b.charCodeAt(offset + (d0 = x));
+		bx1 = b.charCodeAt(offset + (d1 = x + 1));
+		bx2 = b.charCodeAt(offset + (d2 = x + 2));
+		bx3 = b.charCodeAt(offset + (d3 = x + 3));
+		dd = x += 4;
+		for (y = 0; y < len; y += 2) {
+			dy = vector[y];
+			ay = vector[y + 1];
+			d0 = _min(dy, d0, d1, bx0, ay);
+			d1 = _min(d0, d1, d2, bx1, ay);
+			d2 = _min(d1, d2, d3, bx2, ay);
+			dd = _min(d2, d3, dd, bx3, ay);
+			vector[y] = dd;
+			d3 = d2;
+			d2 = d1;
+			d1 = d0;
+			d0 = dy;
+		}
+	}
+
+	for (; x < lb; ) {
+		bx0 = b.charCodeAt(offset + (d0 = x));
+		dd = ++x;
+		for (y = 0; y < len; y += 2) {
+			dy = vector[y];
+			vector[y] = dd = _min(dy, d0, dd, bx0, vector[y + 1]);
+			d0 = dy;
+		}
+	}
+
+	return dd;
+};
+const createLeaderboard = (lb, header = true) => {
+	let res = `<div class="eight wide column">
+                ${header ? `<h1 class="ui header">Leaderboard</h1>` : ``}
+                <div class="ui middle aligned center aligned grid">
+                    <div class="four column row">
+                        <div class="ui header column">Place</div>
+                        <div class="ui header column">Name</div>
+                        <div class="ui header column">Score</div>
+                        <div class="ui header column">Time (seconds)</div>
+                    </div>`;
+	for (let i = 0; i < Math.min(10, lb.length); i++) {
+		res += `<div class="four column row">
+                    <div class="ui column">${i + 1}</div>
+                    <div class="ui column">${lb[i].name}</div>
+                    <div class="ui column">${lb[i].score}</div>
+                    <div class="ui column">${lb[i].time}</div>
+                </div>`;
+	}
+
+	header
+		? (res += `</div></div><div class="ui vertical divider">and</div>`)
+		: (res += "");
+	return res;
+};
+const allSongs = {
+	modern: [
+		{
+			link: "Memories.mp3",
+			artist: ["maroon 5", "maroon five"],
+			name: ["memories"],
+			answer: "Memories by Maroon 5",
+		},
+		{
+			link: "Happier.mp3",
+			artist: ["bastille", "marshmello"],
+			name: ["happier"],
+			answer: "Happier by Bastille (and Marshmello)",
+		},
+		{
+			link: "SomeoneYouLoved.mp3",
+			artist: ["lewis capaldi"],
+			name: ["someone you loved"],
+			answer: "Someone You Loved by Lewis Capaldi",
+		},
+		{
+			link: "StoryOfMyLife.mp3",
+			artist: ["one direction"],
+			name: ["story of my life"],
+			answer: "Story of My Life by One Direction",
+		},
+		{
+			link: "Sunflower.mp3",
+			artist: ["post malone", "swae lee"],
+			name: [
+				"sunflower",
+				"spider man",
+				"spider man: into the spider verse",
+				"spider man into the spider verse",
+				"spider man into the spider-verse",
+				"spider man into the spider-verse",
+				"sunflower (spider-man: into the spider-verse)",
+			],
+			answer: "Sunflower by Post Malone (and Swae Lee)",
+		},
+		{
+			link: "Ransom.mp3",
+			artist: ["lil tecca", "tecca"],
+			name: ["ransom"],
+			answer: "Ransom by Lil Tecca",
+		},
+		{
+			link: "Shallow.mp3",
+			artist: [
+				"lady gaga",
+				"bradley cooper",
+				"lady gaga and bradley cooper",
+			],
+			name: ["shallow"],
+			answer: "Shallow by Lady Gaga",
+		},
+		{
+			link: "Perfect.mp3",
+			artist: ["ed sheeran"],
+			name: ["perfect"],
+			answer: "Perfect by Ed Sheeran",
+		},
+	],
+	"2000s": [
+		{
+			link: "PokerFace.mp3",
+			artist: ["lady gaga"],
+			name: ["poker face"],
+			answer: "Poker Face by Lady Gaga",
+		},
+		{
+			link: "Umbrella.mp3",
+			artist: ["rihanna"],
+			name: ["umbrella"],
+			answer: "Umbrella by Rihanna",
+		},
+		{
+			link: "SinceYouBeenGone.mp3",
+			artist: ["kelly clarkson"],
+			name: [
+				"since you been gone",
+				"since u been gone",
+				"since you've been gone",
+			],
+			answer: "Since U Been Gone by Kelly Clarkson",
+		},
+		{
+			link: "LoseYourself.mp3",
+			artist: ["eminem"],
+			name: ["lose yourself"],
+			answer: "Lose Yourself by Eminem",
+		},
+		{
+			link: "CrazyInLove.mp3",
+			artist: ["beyonce"],
+			name: ["crazy in love"],
+			answer: "Crazy in Love by Beyonce",
+		},
+		{
+			link: "IKissedAGirl.mp3",
+			artist: ["katy perry"],
+			name: ["i kissed a girl"],
+			answer: "I Kissed a Girl by Katy Perry",
+		},
+		{
+			link: "YouBelongWithMe.mp3",
+			artist: ["taylor swift"],
+			name: ["you belong with me"],
+			answer: "You Belong With Me by Taylor Swift",
+		},
+		{
+			link: "MrBrightside.mp3",
+			artist: ["the killers", "killers"],
+			name: ["mr. brightside", "mr brightside"],
+			answer: "",
+		},
+		{
+			link: "Zombie.mp3",
+			artist: ["the cranberries", "cranberries"],
+			name: ["zombie"],
+			answer: "Zombie by The Cranberries",
+		},
+	],
+	"1990s": [
+		{
+			link: "BabyOneMoreTime.mp3",
+			artist: ["britney spears"],
+			name: ["baby one more time", "hit me baby one more time"],
+			answer: "Baby One More Time by Britney Spears",
+		},
+		{
+			link: "UnbreakMyHeart.mp3",
+			artist: ["toni braxton"],
+			name: ["unbreak my heart", "un-break my heart"],
+			answer: "Un-Break My Heart by Toni Braxton",
+		},
+		{
+			link: "IWantItThatWay.mp3",
+			artist: ["backstreet boys"],
+			name: ["i want it that way"],
+			answer: "I Want It That Way by Backstreet Boys",
+		},
+		{
+			link: "Wonderwall.mp3",
+			artist: ["oasis"],
+			name: ["wonder wall", "wonderwall"],
+			answer: "Wonderwall by Oasis",
+		},
+		{
+			link: "LifeIsAHighway.mp3",
+			artist: ["tom cochrane"],
+			name: ["life is a highway"],
+			answer: "Life is a Highway by Tom Cochrane",
+		},
+	],
+};
 
 let finalGrid = [];
 $(".github.icon").click(() => {
