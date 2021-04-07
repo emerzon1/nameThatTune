@@ -5,229 +5,8 @@ const scoreText = document.getElementById("score");
 const personInput = document.getElementById("person");
 let start = new Date().getTime();
 let leaderboard;
-let allSongs = {
-	modern: [
-		{
-			link: "Memories.mp3",
-			artist: ["maroon 5", "maroon five"],
-			name: ["memories"],
-			answer: "Memories by Maroon 5",
-		},
-		{
-			link: "Happier.mp3",
-			artist: ["bastille", "marshmello"],
-			name: ["happier"],
-			answer: "Happier by Bastille (and Marshmello)",
-		},
-		{
-			link: "SomeoneYouLoved.mp3",
-			artist: ["lewis capaldi"],
-			name: ["someone you loved"],
-			answer: "Someone You Loved by Lewis Capaldi",
-		},
-		{
-			link: "StoryOfMyLife.mp3",
-			artist: ["one direction"],
-			name: ["story of my life"],
-			answer: "Story of My Life by One Direction",
-		},
-		{
-			link: "Sunflower.mp3",
-			artist: ["post malone", "swae lee"],
-			name: [
-				"sunflower",
-				"spider man",
-				"spider man: into the spider verse",
-				"spider man into the spider verse",
-				"spider man into the spider-verse",
-				"spider man into the spider-verse",
-				"sunflower (spider-man: into the spider-verse)",
-			],
-			answer: "Sunflower by Post Malone (and Swae Lee)",
-		},
-		{
-			link: "Ransom.mp3",
-			artist: ["lil tecca", "tecca"],
-			name: ["ransom"],
-			answer: "Ransom by Lil Tecca",
-		},
-		{
-			link: "Shallow.mp3",
-			artist: [
-				"lady gaga",
-				"bradley cooper",
-				"lady gaga and bradley cooper",
-			],
-			name: ["shallow"],
-			answer: "Shallow by Lady Gaga",
-		},
-		{
-			link: "Perfect.mp3",
-			artist: ["ed sheeran"],
-			name: ["perfect"],
-			answer: "Perfect by Ed Sheeran",
-		},
-	],
-	"2000s": [
-		{
-			link: "PokerFace.mp3",
-			artist: ["lady gaga"],
-			name: ["poker face"],
-			answer: "Poker Face by Lady Gaga",
-		},
-		{
-			link: "Umbrella.mp3",
-			artist: ["rihanna"],
-			name: ["umbrella"],
-			answer: "Umbrella by Rihanna",
-		},
-		{
-			link: "SinceYouBeenGone.mp3",
-			artist: ["kelly clarkson"],
-			name: [
-				"since you been gone",
-				"since u been gone",
-				"since you've been gone",
-			],
-			answer: "Since U Been Gone by Kelly Clarkson",
-		},
-		{
-			link: "LoseYourself.mp3",
-			artist: ["eminem"],
-			name: ["lose yourself"],
-			answer: "Lose Yourself by Eminem",
-		},
-		{
-			link: "CrazyInLove.mp3",
-			artist: ["beyonce"],
-			name: ["crazy in love"],
-			answer: "Crazy in Love by Beyonce",
-		},
-		{
-			link: "IKissedAGirl.mp3",
-			artist: ["katy perry"],
-			name: ["i kissed a girl"],
-			answer: "I Kissed a Girl by Katy Perry",
-		},
-		{
-			link: "YouBelongWithMe.mp3",
-			artist: ["taylor swift"],
-			name: ["you belong with me"],
-			answer: "You Belong With Me by Taylor Swift",
-		},
-		{
-			link: "MrBrightside.mp3",
-			artist: ["the killers"],
-			name: ["mr. brightside", "mr brightside"],
-			answer: "",
-		},
-		{
-			link: "Zombie.mp3",
-			artist: ["the cranberries", "cranberries"],
-			name: ["zombie"],
-			answer: "Zombie by The Cranberries",
-		},
-		/*{
-			link: "",
-			artist: [],
-			name: [],
-			answer: "",
-		},
-		{
-			link: "",
-			artist: [],
-			name: [],
-			answer: "",
-		},*/
-	],
-	"1990s": [
-		{
-			link: "BabyOneMoreTime.mp3",
-			artist: ["britney spears"],
-			name: ["baby one more time", "hit me baby one more time"],
-			answer: "Baby One More Time by Britney Spears",
-		},
-		{
-			link: "UnbreakMyHeart.mp3",
-			artist: ["toni braxton"],
-			name: ["unbreak my heart", "un-break my heart"],
-			answer: "Un-Break My Heart by Toni Braxton",
-		},
-		{
-			link: "IWantItThatWay.mp3",
-			artist: ["backstreet boys"],
-			name: ["i want it that way"],
-			answer: "I Want It That Way by Backstreet Boys",
-		},
-		{
-			link: "Wonderwall.mp3",
-			artist: ["oasis"],
-			name: ["wonder wall", "wonderwall"],
-			answer: "Wonderwall by Oasis",
-		},
-		{
-			link: "LifeIsAHighway.mp3",
-			artist: ["tom cochrane"],
-			name: ["life is a highway"],
-			answer: "Life is a Highway by Tom Cochrane",
-		},
-		/*{
-			link: "",
-			artist: [],
-			name: [],
-			answer: "",
-		},
-		{
-			link: "",
-			artist: [],
-			name: [],
-			answer: "",
-		},
-		{
-			link: "",
-			artist: [],
-			name: [],
-			answer: "",
-		},
-		{
-			link: "",
-			artist: [],
-			name: [],
-			answer: "",
-		},*/
-	],
-};
-const createLeaderboard = (lb, header = true) => {
-	let res = `<div class="eight wide column">
-                ${header ? `<h1 class="ui header">Leaderboard</h1>` : ``}
-                <div class="ui middle aligned center aligned grid">
-                    <div class="four column row">
-                        <div class="ui header column">Place</div>
-                        <div class="ui header column">Name</div>
-                        <div class="ui header column">Score</div>
-                        <div class="ui header column">Time (seconds)</div>
-                    </div>`;
-	for (let i = 0; i < Math.min(10, lb.length); i++) {
-		res += `<div class="four column row">
-                    <div class="ui column">${i + 1}</div>
-                    <div class="ui column">${lb[i].name}</div>
-                    <div class="ui column">${lb[i].score}</div>
-                    <div class="ui column">${lb[i].time}</div>
-                </div>`;
-	}
 
-	header
-		? (res += `</div></div><div class="ui vertical divider">and</div>`)
-		: (res += "");
-	return res;
-};
 let finalGrid = [];
-function shuffleArray(array) {
-	for (let i = array.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[array[i], array[j]] = [array[j], array[i]];
-	}
-}
 $(".github.icon").click(() => {
 	window.open("https://github.com/emerzon1", "_blank");
 });
@@ -388,11 +167,19 @@ form.addEventListener("submit", (e) => {
 	let artist = e.target[1].value;
 	let addedScore = 0;
 	if (questionNumber === Math.min(4, songs.length - 1)) {
-		if (songs[questionNumber].name.includes(name.toLowerCase())) {
+		if (
+			songs[questionNumber].name.some(
+				(currentName) => distance(currentName, name.toLowerCase()) <= 2
+			)
+		) {
 			score += 2;
 			addedScore += 2;
 		}
-		if (songs[questionNumber].artist.includes(artist.toLowerCase())) {
+		if (
+			songs[questionNumber].artist.some((currentArtist) =>
+				distance(currentArtist, artist.toLowerCase())
+			)
+		) {
 			score += 1;
 			addedScore += 1;
 		}
@@ -414,9 +201,6 @@ form.addEventListener("submit", (e) => {
 				time: parseInt(elapsed / 1000),
 			};
 			leaderboard.push(data);
-			//Function used to determine the order of the elements. It is
-			//expected to return a negative value if first argument is less than second argument,
-			//zero if they're equal and a positive value otherwise. I
 			leaderboard.sort((a, b) => {
 				if (a.score != b.score) {
 					return b.score - a.score;
@@ -446,11 +230,19 @@ form.addEventListener("submit", (e) => {
 		$("#endScreen").toggle();
 		return;
 	}
-	if (songs[questionNumber].name.includes(name.toLowerCase())) {
+	if (
+		songs[questionNumber].name.some(
+			(currentName) => distance(currentName, name.toLowerCase()) <= 2
+		)
+	) {
 		score += 2;
 		addedScore += 2;
 	}
-	if (songs[questionNumber].artist.includes(artist.toLowerCase())) {
+	if (
+		songs[questionNumber].artist.some((currentArtist) =>
+			distance(currentArtist, artist.toLowerCase())
+		)
+	) {
 		score += 1;
 		addedScore += 1;
 	}

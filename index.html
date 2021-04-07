@@ -78,17 +78,42 @@
 			id="fullGrid"
 		>
 			<div class="eight wide column">
-				<div id="mainText" class="ui header">
-					Enter your name to record your score:<br /><br />
+				<div id="mainText">
+					<div class="ui header">
+						Enter your name to record your score:
+					</div>
 					<div class="ui input">
 						<input id="person" type="text" placeholder="Name" />
 					</div>
-					<br /><br />Welcome to Name That Tune. You will have to
-					guess the name and singer of five songs. The song name is
-					worth 2 points and the singer's name is worth one. The
-					maximum score is 15 points. The tiebreaker is your time, so
-					try to go quickly. Select a mode using the menu at the top
-					of the page.
+					<br /><br />
+					<div class="instructions">
+						<div class="ui header">Welcome to Name That Tune.</div>
+						<b>
+							<ul style="text-align: left">
+								<li>
+									You will have to guess the name and singer
+									of five songs.
+								</li>
+								<li>
+									The song name is worth 2 points and the
+									singer's name is worth 1.
+								</li>
+								<li>
+									You will get credit if your answer is within
+									two letters of the correct answer.
+								</li>
+								<li>The maximum score is 15 points.</li>
+								<li>
+									The tiebreaker is your time, so try to go
+									quickly.
+								</li>
+							</ul>
+							<div class="ui header">
+								Select a mode using the menu at the top of the
+								page.
+							</div>
+						</b>
+					</div>
 				</div>
 				<div id="goBack" class="ui header">
 					Click <a href="?">this</a> link to go back to the previous
@@ -150,6 +175,8 @@
 				<i class="github link icon"></i>
 			</div>
 		</div>
+		<script src="helpers.js"></script>
+		<script src="allSongs.js"></script>
 		<script src="main.js"></script>
 	</body>
 </html>
