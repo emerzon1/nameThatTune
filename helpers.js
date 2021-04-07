@@ -4,6 +4,14 @@ const shuffleArray = (array) => {
 		[array[i], array[j]] = [array[j], array[i]];
 	}
 };
+const getParameterByName = (name, url = window.location.href) => {
+	name = name.replace(/[\[\]]/g, "\\$&");
+	let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return "";
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
 const _min = (d0, d1, d2, bx, ay) => {
 	return d0 < d1 || d2 < d1
 		? d0 > d2

@@ -40,7 +40,6 @@ $(function () {
 			$("#scoreContent").toggle();
 			$("#fullGrid").css("display", "none");
 			$("#mainText").toggle();
-			console.log("here");
 			let modernLB;
 			let lb2000;
 			let lb1990;
@@ -128,24 +127,20 @@ let questionNumber = 0;
 let score = 0;
 const audio = document.getElementById("audio");
 document.addEventListener("DOMContentLoaded", () => {
-	audio.src = "songs/" + songs[questionNumber].link;
-	audio.load();
-	audio.pause();
-	$("#endScreen").toggle();
-	$("#questionNum").text(questionNumber + 1);
+	if (getParameterByName("mode")) {
+		audio.src = "songs/" + songs[questionNumber].link;
+		audio.load();
+		audio.pause();
+		$("#endScreen").toggle();
+		$("#questionNum").text(questionNumber + 1);
+	}
 });
 scoreText.textContent = score;
-function getParameterByName(name, url = window.location.href) {
-	name = name.replace(/[\[\]]/g, "\\$&");
-	let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-		results = regex.exec(url);
-	if (!results) return null;
-	if (!results[2]) return "";
-	return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
 const mode = getParameterByName("mode");
 let songs = allSongs[mode];
-shuffleArray(songs);
+if (songs) {
+	shuffleArray(songs);
+}
 const createTable = () => {
 	let res = "";
 	for (let i = 0; i < finalGrid.length; i++) {
@@ -208,7 +203,6 @@ form.addEventListener("submit", (e) => {
 					return a.time - b.time;
 				}
 			});
-			console.log(leaderboard);
 			$.ajax({
 				url: "https://name-that-tune-leaderboard.herokuapp.com/",
 				type: "POST",
