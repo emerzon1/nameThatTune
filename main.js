@@ -172,7 +172,7 @@ form.addEventListener("submit", (e) => {
 		}
 		if (
 			songs[questionNumber].artist.some((currentArtist) =>
-				distance(currentArtist, artist.toLowerCase())
+				distance(currentArtist, artist.toLowerCase()) <= 2
 			)
 		) {
 			score += 1;
@@ -234,7 +234,7 @@ form.addEventListener("submit", (e) => {
 	}
 	if (
 		songs[questionNumber].artist.some((currentArtist) =>
-			distance(currentArtist, artist.toLowerCase())
+			distance(currentArtist, artist.toLowerCase()) <= 2
 		)
 	) {
 		score += 1;
