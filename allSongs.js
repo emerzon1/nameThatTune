@@ -148,7 +148,7 @@ const allSongs = {
 		},
 		{
 			link: "LifeIsAHighway.mp3",
-			artist: ["tom cochrane"],
+			artist: ["tom cochrane", "rascal flatts"],
 			name: ["life is a highway"],
 			answer: "Life is a Highway by Tom Cochrane",
 		},
